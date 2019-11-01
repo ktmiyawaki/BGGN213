@@ -1,0 +1,75 @@
+---
+title: "KM_19.10.18_Q6"
+author: "Kiana Miyamoto"
+date: "10/18/2019"
+output: html_document
+---
+
+```{r}
+# Can you improve this analysis code?
+library(bio3d)
+s1 <- read.pdb("4AKE") # kinase with drug
+s2 <- read.pdb("1AKE") # kinase no drug
+s3 <- read.pdb("1E4Y") # kinase with drug
+ #trim.pdb = downsize pdb file to chainA
+s1.chainA <- trim.pdb(s1, chain="A", elety="CA")
+s2.chainA <- trim.pdb(s2, chain="A", elety="CA")
+s3.chainA <- trim.pdb(s3, chain="A", elety="CA")
+  #create vectors with 214 residues from the s#.chainA to select for atoms from b
+s1.b <- s1.chainA$atom$b
+s2.b <- s2.chainA$atom$b
+s3.b <- s3.chainA$atom$b
+  #create line plots for each protein visualizing the B-factor trends and secondary structure
+plotb3(s1.b, sse=s1.chainA, typ="l", ylab="Bfactor")
+plotb3(s2.b, sse=s2.chainA, typ="l", ylab="Bfactor")
+plotb3(s3.b, sse=s3.chainA, typ="l", ylab="Bfactor")
+```
+
+```{r}
+#create overlayed plot of all proteins(1,2,3) B-factor trends
+plotb3(s1.b, sse=s1.chainA, typ="l",lwd=2, ylab="Bfactor")
+points(s2.b, typ="l",col="blue", lwd=2)
+points(s3.b, typ="l",col="green", lwd=1)
+```
+
+```{r}
+#create a Cluster Dendrogram for quantitative comparison of B-factor trends
+hc<-hclust(dist(rbind(s1.b,s2.b,s3.b)))
+plot(hc)
+```
+
+Q6. How would you generalize the original code above to work with any set of input
+protein structures?
+
+```{r}
+library(bio3d)
+#create input vector of protein names: proteins
+proteins<-c("3fxx","4AKE", "1AKE", "1E4Y")
+
+res_vec<- function(x) {
+  #read.pdb searches for name in proteins and save in s1
+  s1 <- read.pdb(x)
+ #trim.pdb = downsize pdb file to chainA
+s1.chainA <- trim.pdb(s1, chain="A", elety="CA")
+  #create vectors with 214 residues from the s#.chainA to select for atoms from b
+s1.b <- s1.chainA$atom$b
+  #create line plots for each protein visualizing the B-factor trends and secondary structure
+plotb3(s1.b, sse=s1.chainA, typ="l", ylab="Bfactor")
+}
+#use sapply to apply res_vec over proteins to generate plots
+sapply(proteins, res_vec)
+```
+
+Documentation:
+1 pt - comments on what are the inputs to the function.
+1 pt - what the function does and how to use it.
+1 pt - what is the output of the function.
+
+Code:
+2 pt - function behaves as desired, producing the correct output and follows assignment
+specifications.
+2 pt - the code is efficient meaning it uses best practices such as limiting calculation
+duplication.
+2 pt - code is readable, meaning best practices are used including proper indentation
+and whitespace used, relevant variable names, and organized in a logical manner.
+1 pt - function code and call executes and is working properly
