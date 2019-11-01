@@ -1,2 +1,3 @@
-# BGGN213
+# BGGN213 Bioinformatics class
 Classwork from BGGN213
+This is my work from BGGN213 at UCSD.
