@@ -1,0 +1,101 @@
+---
+title: "UKFoods"
+author: "Kiana Miyamoto"
+date: "10/25/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+UK Foods
+```{r}
+x <- read.csv("~/BGGN213_Bioinformatics/class08/UK_foods.csv")
+```
+Q1. How many rows and columns are in your new data frame named x? What R functions could you use to answer this questions?
+rows: 17
+columns:5
+```{r}
+nrow(x)
+ncol(x)
+dim(x)
+str(x)
+```
+```{r}
+#minus indexing
+rownames(x)<- x[,1]
+x<- x[,-1]
+head(x)
+```
+```{r}
+dim(x)
+
+x <- read.csv("~/BGGN213_Bioinformatics/class08//UK_foods.csv", row.names=1)
+head(x)
+```
+Q2. Which approach to solving the ‘row-names problem’ mentioned above do you prefer and why? Is one approach more robust than another under certain circumstances?
+2nd one, because it isn't destructive code over many iterations
+
+```{r}
+barplot(as.matrix(x), beside=T, col=rainbow(nrow(x)))
+```
+
+Q3: Changing what optional argument in the above barplot() function results in the following plot?
+change beside arg to F
+```{r}
+barplot(as.matrix(x), beside=F, col=rainbow(nrow(x)))
+```
+
+Q5: Generating all pairwise plots may help somewhat. Can you make sense of the following code and resulting figure? What does it mean if a given point lies on the diagonal for a given plot?
+```{r}
+pairs(x, col=rainbow(10), pch=16)
+```
+Q6. What is the main differences between N. Ireland and the other countries of the UK in terms of this data-set? indicated by varying points from the diagonal, however, does not specify what those are....
+
+
+```{r}
+# Use the prcomp() PCA function 
+pca <- prcomp( t(x) )
+summary(pca)
+```
+
+Q7. Complete the code below to generate a plot of PC1 vs PC2. The second line adds text labels over the data points.
+```{r}
+# Plot PC1 vs PC2
+plot(pca$x[,1], pca$x[,2], xlab="PC1", ylab="PC2", xlim=c(-270,500))
+text(pca$x[,1], pca$x[,2], colnames(x))
+```
+
+Q8. Customize your plot so that the colors of the country names match the colors in our UK and Ireland map and table at start of this document.
+```{r}
+# Plot PC1 vs PC2
+plot(pca$x[,1], pca$x[,2], xlab="PC1", ylab="PC2", xlim=c(-270,500))
+text(pca$x[,1], pca$x[,2], colnames(x), col=c("red", "orange", "blue", "green"))
+abline(h=0,col="gray", lty=2)
+```
+
+```{r}
+#Below we can use the square of pca$sdev , which stands for “standard deviation”, to calculate how much variation in the original data each PC accounts for.
+v <- round( pca$sdev^2/sum(pca$sdev^2) * 100 )
+v
+
+## or the second row here...
+z <- summary(pca)
+z$importance
+```
+
+```{r}
+barplot(v, xlab="Principal Component", ylab="Percent Variation")
+```
+
+```{r}
+## Lets focus on PC1 as it accounts for > 90% of variance 
+par(mar=c(10, 3, 0.35, 0))
+barplot( pca$rotation[,1], las=2 )
+```
+
+Q9: Generate a similar ‘loadings plot’ for PC2. What two food groups feature prominantely and what does PC2 mainly tell us about?
+```{r}
+
+```
+
