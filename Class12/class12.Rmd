@@ -1,0 +1,34 @@
+---
+title: "class12"
+author: "Kiana Miyamoto"
+date: "11/8/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Prepare protein structure for docking
+
+We want to download the 1HSG PDB strcture and then produce a "protein-only" and ligand-only new separate PDB files.
+```{r}
+library(bio3d)
+get.pdb("1hsg")
+```
+
+```{r}
+pdb<-read.pdb("1hsg.pdb")
+pdb
+```
+Select one ligand
+```{r}
+ligand<-atom.select(pdb, "ligand", value=TRUE)
+write.pdb(ligand, file="1hsg_ligand.pdb")
+```
+
+```{r}
+protein<- atom.select(pdb, "protein", value=TRUE)
+write.pdb(protein, file="1hsg_protein.pdb")
+```
+

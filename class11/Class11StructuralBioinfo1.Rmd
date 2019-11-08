@@ -1,0 +1,93 @@
+---
+title: "Class 11: Structural Bioinformatics 1"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+ExpMet<-read.csv("Data Export Summary.csv")
+```
+Q. determine the percentage of structures solved by X-Ray and Electron Microscopy. 
+
+```{r}
+PropTotal<-ExpMet$Total/sum(ExpMet$Total)*100
+names(PropTotal)<- ExpMet$Experimental.Method
+round(PropTotal,2)
+```
+
+Q. Also can you determine what proportion of structures are protein?
+```{r}
+ProtProp<-sum(ExpMet$Proteins)/sum(ExpMet$Total)*100
+round(ProtProp,2)
+```
+
+```{r}
+library(bio3d)
+pdb <- read.pdb("1hsg")
+pdb
+```
+
+```{r}
+pdb$atom
+```
+
+```{r}
+pdb$atom[1,"resid"]
+```
+
+
+```{r}
+aa321(pdb$atom[, "resid"])
+```
+
+```{r}
+ca.inds<-atom.select(pdb,"calpha")
+ca.inds
+```
+
+```{r}
+a.inds <- atom.select(pdb, chain="A")
+ca.inds <- atom.select(pdb, "calpha", chain="A")
+cab.inds <- atom.select(pdb, elety=c("CA","CB"), chain="A",
+resno=10:20)
+```
+Create PDB of protein
+```{r}
+protein<-atom.select(pdb, "protein", value=TRUE)
+```
+Create PDB of ligand
+```{r}
+ligand<-atom.select(pdb, "ligand", value=TRUE) 
+```
+Write PDBs
+```{r}
+write.pdb(protein, file="1hsg_protein.pdb")
+write.pdb(ligand, file="1hsg_ligand.pdb")
+```
+##Combine PDBs
+```{r}
+#combine.pdb("1hsg_protein.pdb", "1hsg_ligand.pdb")
+```
+
+```{r}
+library(bio3d.view)
+view(pdb,"overview", col="sse")
+```
+
+
+```{r}
+library(bio3d)
+pdb <- read.pdb("1hel")
+# Normal mode analysis calculation
+modes <- nma(pdb)
+m7 <- mktrj(modes,
+ mode=7,
+ file="mode_7.pdb")
+view(m7, col=vec2color( rmsf(m7) ))
+```
+
