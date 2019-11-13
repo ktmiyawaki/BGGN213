@@ -1,0 +1,143 @@
+---
+title: "Transcriptomics and RNA-Seq analysis"
+author: "Kiana Miyamoto"
+date: "11/13/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Setup Bioconductor DESeq2
+
+```{r eval=FALSE}
+install.packages("BiocManager")
+BiocManager::install()
+# For this class, you'll also need DESeq2:
+BiocManager::install("DESeq2")
+```
+
+## Data for todays class
+```{r}
+counts<- read.csv("airway_scaledcounts.csv", stringsAsFactors = FALSE)
+metadata<- read.csv("airway_metadata.csv", stringsAsFactors = FALSE)
+```
+
+```{r}
+head(counts)
+```
+
+How many genes do we have in this dataset?
+```{r}
+nrow(counts)
+```
+How many experiments do we have?
+```{r}
+ncol(counts)-1
+```
+
+let's make sure metadata id col matches rhe colnames of counts
+```{r}
+colnames(counts)[-1]
+```
+
+```{r}
+metadata$id
+```
+
+```{r}
+all(colnames(counts)[-1]==metadata$id)
+```
+
+
+```{r}
+control.id <- metadata[metadata$dex=="control", ]$id
+control.id
+```
+
+```{r}
+control <- metadata[metadata[,"dex"]=="control",]
+control.mean <- rowSums( counts[ ,control$id] )/length(control.id) 
+names(control.mean) <- counts$ensgene
+```
+
+
+```{r}
+treated.id <- metadata[metadata$dex=="treated", ]$id
+treated.id
+```
+
+```{r}
+
+treated <- metadata[metadata[,"dex"]=="treated",]
+treated.mean <- rowSums( counts[ ,treated$id] )/length(treated.id) 
+names(treated.mean) <- counts$ensgene
+```
+
+```{r}
+head(counts[, control.id])
+```
+
+```{r}
+meancounts <- data.frame(control.mean, treated.mean)
+meancounts
+```
+
+```{r}
+plot(meancounts, log="xy")
+```
+
+```{r}
+meancounts$log2fc <- log2(meancounts[,"treated.mean"]/meancounts[,"control.mean"])
+head(meancounts)
+```
+
+```{r}
+zero.vals <- which(meancounts[,1:2]==0, arr.ind=TRUE)
+
+to.rm <- unique(zero.vals[,1])
+mycounts <- meancounts[-to.rm,]
+head(mycounts)
+```
+
+
+```{r}
+x<- data.frame(happy=c(0,4,0,5), sad=c(6,1,0,2))
+zeroes<- which(x==0, arr.ind=T)
+unique(which(x==0, arr.ind=T)[,1])
+```
+
+```{r}
+zeroes<- which(meancounts[,1:2]==0, arr.ind=T)
+
+remove<-unique(zeroes[,1])
+mycounts<- meancounts[-to.rm,]
+head(mycounts)
+nrow(mycounts)
+```
+
+```{r}
+up.ind <- mycounts$log2fc > 2
+sum(up.ind==TRUE)
+down.ind <- mycounts$log2fc < (-2)
+sum(down.ind==TRUE)
+```
+
+```{r}
+library("AnnotationDbi")
+library("org.Hs.eg.db")
+```
+
+```{r}
+columns(org.Hs.eg.db)
+mycounts$symbol <- mapIds(org.Hs.eg.db,
+                     keys=row.names(mycounts), # Our genenames
+                     keytype="ENSEMBL",        # The format of our genenames
+                     column="SYMBOL",          # The new format we want to add
+                     multiVals="first")
+```
+
+```{r}
+head(mycounts)
+```
+
