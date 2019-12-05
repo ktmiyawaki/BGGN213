@@ -2,7 +2,7 @@
 title: "class12"
 author: "Kiana Miyamoto"
 date: "11/8/2019"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
