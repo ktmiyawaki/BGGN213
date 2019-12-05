@@ -10,9 +10,10 @@ Contents:
 - Class08 [Machine Learning-Unsupervised learning and clustering](https://github.com/ktmiyawaki/BGGN213/blob/master/class08/class08.md)
 - Class09 [Unsupervised learning analysis with cancer cell data](https://github.com/ktmiyawaki/BGGN213/blob/master/class09/class09.md)
 - Class10 Database searching, sequence analysis, and structures
-- Class11 [Structural Bioinformatics]()
-- Class12 [Drug discovery and design-docking methods]()
-- Class14 [RNA-Seq data]()
-- Class15 [Genome Annotation and Gene Lists]()
-- Class16 [Biological Network Analysis]()
-- Class17 [Using UNIX]()
+- Class11 [Structural Bioinformatics](https://github.com/ktmiyawaki/BGGN213/blob/master/class11/Class11StructuralBioinfo1.md)
+- Class12 [Drug discovery and design-docking methods](https://github.com/ktmiyawaki/BGGN213/blob/master/Class12/class12.md)
+- Class14 [RNA-Seq data](https://github.com/ktmiyawaki/BGGN213/blob/master/Class14/class14.md)
+- Class15 [Genome Annotation and Gene Lists](https://github.com/ktmiyawaki/BGGN213/blob/master/Class15/class15.md)
+- Class16 [Biological Network Analysis](https://github.com/ktmiyawaki/BGGN213/blob/master/Class16/class16.md)
+- Class17 Using UNIX
+- Class18 Cancer Genomics
