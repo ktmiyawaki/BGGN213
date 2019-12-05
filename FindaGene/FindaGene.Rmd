@@ -1,0 +1,38 @@
+---
+title: "FindAGenePt2"
+author: "Kiana Miyamoto"
+date: "12/4/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(bio3d)
+library(pheatmap)
+```
+
+
+```{r}
+alignment <- read.fasta("~/BGGN213_Bioinformatics/alignment.txt")
+```
+
+```{r}
+seq <- seqidentity(alignment)
+```
+
+```{r}
+heatmap <- pheatmap(seq)
+```
+
+```{r}
+heatmap(seq, margins= c(15,11))
+
+```
+
+```{r}
+
+```
+
