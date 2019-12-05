@@ -3953,7 +3953,7 @@ modes <- nma(pdb)
 ```
 
     ##  Building Hessian...     Done in 0.03 seconds.
-    ##  Diagonalizing Hessian...    Done in 0.19 seconds.
+    ##  Diagonalizing Hessian...    Done in 0.17 seconds.
 
 ``` r
 m7 <- mktrj(modes,
